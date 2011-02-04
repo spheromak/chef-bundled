@@ -1,6 +1,6 @@
 My hacked versions of chef rpm's to use bundler 
 
-defaults to /usr/local and requires you have a couple things setup in your 
+defaults to /usr/local 
 
 
 
@@ -23,4 +23,14 @@ my ~/.rpmmacros lays this out to build from my repos as so:
 %dist mnst
 
 %bundler_install_to  /usr/local/
+
+
+Most the specs are hacked up versions of other peoples work by these fine folk:
+
+Sean OMeara 
+mkent 
+jtimberman
+
+if theres others i missed im sorry :)
+
 
