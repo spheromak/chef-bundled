@@ -1,0 +1,19 @@
+# Configuration file for the chef-client service
+
+#LOGFILE=/var/log/chef/client.log
+
+# Sleep interval between runs.
+# This value is in seconds.
+INTERVAL=300
+
+# Maximum amount of random delay before starting a run. Prevents every client
+# from contacting the server at the exact same time.
+# This value is in seconds.
+SPLAY=30
+
+# Any additional chef-client options.
+#OPTIONS=
+
+
+
+

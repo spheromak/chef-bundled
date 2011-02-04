@@ -1,0 +1,26 @@
+My hacked versions of chef rpm's to use bundler 
+
+defaults to /usr/local and requires you have a couple things setup in your 
+
+
+
+my ~/.rpmmacros lays this out to build from my repos as so:
+
+# %_topdir defines the top directory to be used for RPM building purposes
+%_topdir        %(echo $HOME)/builds
+%_sourcedir     %{_topdir}/src/
+%_specdir       %{_topdir}/spec/
+%_tmppath       %{_topdir}/tmp
+%_builddir      %{_topdir}/build
+%_rpmdir        %{_topdir}/pkg
+%_srcrpmdir     %{_topdir}/pkg
+%_buildroot     %{_topdir}/tmp/%{name}-%{version}-root
+
+#%_rpmfilename   %{name}-%{version}-%{release}.%{arch}.rpm
+
+%packager       %(echo ${USER}@)%(hostname)
+%distribution   mnst
+%dist mnst
+
+%bundler_install_to  /usr/local/
+

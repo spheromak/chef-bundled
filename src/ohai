@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export BUNDLE_GEMFILE="/usr/local/ohai/Gemfile"
+PROGNAME=`basename $0`
+/usr/bin/bundle exec $PROGNAME $@

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Copyright 2010 Sean OMeara <someara@gmail.com>
+# GPLv2
+
+export BUNDLE_GEMFILE="/opt/chef-0.9.12/Gemfile"
+PROGNAME=`basename $0`
+/usr/bin/bundle exec $PROGNAME $@
