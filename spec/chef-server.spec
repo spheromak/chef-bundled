@@ -3,13 +3,16 @@
 %define rubyver 1.9.0
 %define bundler_install_to  /usr/local
 %define arch x86_64
-%define chef_ver 0.9.12
+%define chef_ver 0.10.4
 %define chef_user chef
 %define chef_group chef
 
+# move src files to its own dir
+%define _sourcedir     %{_topdir}/src/chef-server
+
 Name: %{bundlename}
 Version: %{chef_ver}
-Release: 2%{?dist}
+Release: 1%{?dist}
 Summary: Monolithic chef-server  includes api/slice/solr in one go (via bundler)
 Group: Development/Languages
 License: ASL 2.0
@@ -24,39 +27,25 @@ Requires: rubygem(bundler)
 Requires: chef
 Requires: couchdb
 Requires: rabbitmq-server
+Requires: gecode
 
 Requires(pre): shadow-utils
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(postun): initscripts
 
+BuildRequires: gecode-devel
+
 Provides: %{bundlename} = %{version}
 Provides: chef-server-api = %{version}
 Provides: chef-server-webui = %{version}
 Provides: chef-solr = %{version}
 
-Source1: chef-server.logrotate
-Source2: chef-server.init
-Source3: chef-server.sysconf
-Source4: server.rb
+Source1: server.rb
+Source2: solr.rb
+Source3: webui.rb
 
-Source14: chef-solr.logrotate
-Source15: chef-solr-indexer.logrotate
-Source16: chef-solr.init
-Source17: chef-solr-indexer.init
-Source18: chef-solr.sysconf
-Source19: chef-solr-indexer.sysconf
-Source110: solr.rb
-Source111: solr-indexer.rb
-
-Source22: chef-server-webui.logrotate
-Source23: chef-server-webui.init
-Source24: chef-server-webui.sysconf
-Source25: webui.rb
-
-
-
-BuildArch: %{arch}
+#BuildArch: %{arch}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
 
@@ -71,7 +60,9 @@ This build inclides server  api  webui and solr support in one package under bun
 %setup  -c -T
 
 echo "source \"http://rubygems.org\" " > Gemfile
-echo "gem \"chef\", \"%{version}\" "  >> Gemfile
+echo 'gem "mixlib-log", "1.3.0" ' >> Gemfile
+echo "gem \"chef\", \"%{version}\" "  >>  Gemfile
+echo "gem \"chef-expander\", \"%{version}\" "  >>  Gemfile
 echo "gem \"chef-server-api\", \"%{version}\" "  >> Gemfile
 echo "gem \"chef-solr\", \"%{version}\" "  >> Gemfile
 echo "gem \"chef-server-webui\", \"%{version}\" "  >> Gemfile
@@ -98,65 +89,28 @@ mkdir -p %{buildroot}%{_bindir}
 
 cd  %{buildroot}
 
-bins=( chef-server chef-solr chef-solr-indexer chef-server-webui chef-solr-rebuild )
+bins=( chef-server chef-solr chef-expander  chef-solr-installer chef-expanderctl chef-server-webui chef-solr-rebuild )
 for i in ${bins[@]} ; do
   ln -s %{bundler_install_to}/%{name}/bin/$i $(echo -n %{_bindir} | sed 's/^\///')/$i
 done
 
 mkdir -p %{buildroot}%{_localstatedir}/{log/chef,run/chef,cache/chef}
 
+# quick def to make this shorter
+chef_rhel=%{buildroot}%{bundler_install_to}/%{name}/%{name}-bundle/ruby/1.9.1/gems/chef-%{version}/distro/redhat/etc
 
+for i in chef-server chef-expander chef-solr chef-server-webui ; do 
+  install -Dp -m0644 $chef_rhel/logrotate.d/$i %{buildroot}%{_sysconfdir}/logrotate.d/$i
+  install -Dp -m0755 $chef_rhel/init.d/$i      %{buildroot}%{_initrddir}/$i
+  install -Dp -m0644 $chef_rhel/sysconfig/$i   %{buildroot}%{_sysconfdir}/sysconfig/$i
+done
 
-install -Dp -m0644 \
-  %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/chef-server
+install -Dp -m0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/chef/server.rb
+install -Dp -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/chef/solr.rb
+install -Dp -m0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/chef/webui.rb
 
-install -Dp -m0755 \
-  %{SOURCE2} %{buildroot}%{_initrddir}/chef-server
-
-install -Dp -m0644 \
-  %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/chef-server
-
-install -Dp -m0644 \
-  %{SOURCE4} %{buildroot}%{_sysconfdir}/chef/server.rb
-
-
-install -Dp -m0644 \
-  %{SOURCE14} %{buildroot}%{_sysconfdir}/logrotate.d/chef-solr
-
-install -Dp -m0644 \
-  %{SOURCE15} %{buildroot}%{_sysconfdir}/logrotate.d/chef-solr-indexer
-
-install -Dp -m0755 \
-  %{SOURCE16} %{buildroot}%{_initrddir}/chef-solr
-
-install -Dp -m0755 \
-  %{SOURCE17} %{buildroot}%{_initrddir}/chef-solr-indexer
-
-install -Dp -m0644 \
-  %{SOURCE18} %{buildroot}%{_sysconfdir}/sysconfig/chef-solr
-
-install -Dp -m0644 \
-  %{SOURCE19} %{buildroot}%{_sysconfdir}/sysconfig/chef-solr-indexer
-
-install -Dp -m0644 \
-  %{SOURCE110} %{buildroot}%{_sysconfdir}/chef/solr.rb
-
-install -Dp -m0644 \
-  %{SOURCE111} %{buildroot}%{_sysconfdir}/chef/solr-indexer.rb
-
-
-install -Dp -m0644 \
-  %{SOURCE22} %{buildroot}%{_sysconfdir}/logrotate.d/chef-server-webui
-
-install -Dp -m0755 \
-  %{SOURCE23} %{buildroot}%{_initrddir}/chef-server-webui
-
-install -Dp -m0644 \
-  %{SOURCE24} %{buildroot}%{_sysconfdir}/sysconfig/chef-server-webui
-
-install -Dp -m0644 \
-  %{SOURCE25} %{buildroot}%{_sysconfdir}/chef/webui.rb
-
+cd %{buildroot}/etc/chef
+ln -s solr.rb  expander.rb 
 
 
 # Oh, those wacky developers.
@@ -180,7 +134,7 @@ rm -rf %{buildroot}
 /sbin/chkconfig --add chef-server
 /sbin/chkconfig --add chef-server-webui
 /sbin/chkconfig --add chef-solr
-/sbin/chkconfig --add chef-solr-indexer
+/sbin/chkconfig --add chef-expander
 
 
 
@@ -188,10 +142,10 @@ rm -rf %{buildroot}
 if [ $1 -eq 0 ]; then
   /sbin/service chef-server stop > /dev/null 2>&1 || :
   /sbin/service chef-solr stop > /dev/null 2>&1 || :
-  /sbin/service chef-solr-indexer stop > /dev/null 2>&1 || :
+  /sbin/service chef-expander stop > /dev/null 2>&1 || :
   /sbin/chkconfig --del chef-server
   /sbin/chkconfig --del chef-solr
-  /sbin/chkconfig --del chef-solr-indexer
+  /sbin/chkconfig --del chef-expander
   /sbin/chkconfig --del chef-server-webui 
 fi
 
@@ -200,7 +154,7 @@ fi
 if [ "$1" -ge "1" ] ; then
     /sbin/service chef-server condrestart >/dev/null 2>&1 || :
     /sbin/service chef-solr condrestart >/dev/null 2>&1 || :
-    /sbin/service chef-solr-indexer condrestart >/dev/null 2>&1 || :
+    /sbin/service chef-expander condrestart >/dev/null 2>&1 || :
 fi
 
 
@@ -221,4 +175,11 @@ exit 0
 %attr(-,%{chef_user},root) %dir %{_localstatedir}/log
 %attr(-,%{chef_user},root) %dir %{_localstatedir}/cache
 %attr(-,%{chef_user},root) %dir %{_localstatedir}/run
+
+%config(noreplace) /etc/chef/server.rb
+%config(noreplace) /etc/chef/solr.rb
+%config(noreplace) /etc/sysconfig/chef-expander
+%config(noreplace) /etc/sysconfig/chef-server
+%config(noreplace) /etc/sysconfig/chef-solr
+
 

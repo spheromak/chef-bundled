@@ -17,19 +17,19 @@
 # The chef-solr daemon is configured to log to /var/log/chef/solr.log in
 # /etc/sysconfig/chef-solr.
 
-log_level :warn
+log_level :error
 
-log_location     /var/log/chef/solr.log 
+#log_location     /var/log/chef/solr.log 
 
 # search_index_path specifies where the indexer should store the indexes.
 # valid value is any filesystem directory location.
 
-search_index_path    "/var/lib/chef/search_index"
+search_index_path "/data/solr/search_index"
 
-solr_jetty_path "/var/lib/chef/solr/solr-jetty"
-solr_home_path  "/var/lib/chef/solr"
-solr_data_path  "/var/cache/chef/solr/data"
-solr_heap_size  "2000M"
+solr_jetty_path "/data/solr/solr-jetty"
+solr_home_path  "/data/solr"
+solr_data_path  "/data/solr/data"
+solr_heap_size  "3000M"
 
 # specifies the URL of the SOLR instance for the indexer to connect to.
 
@@ -38,7 +38,7 @@ solr_url        "http://localhost:8983"
 # uses the solr_jetty_path option set above, and the etc directory is
 # actually a symbolic link to /etc/chef/solr-jetty.
 
-#solr_java_opts  "-DSTART=#{Chef::Config[:solr_jetty_path]}/etc/start.config"
+solr_java_opts  "-XX:MaxPermSize=256m "
 
 # Mixlib::Log::Formatter.show_time specifies whether the log should
 # contain timestamps.
@@ -55,3 +55,9 @@ pid_file           "/var/run/chef/solr.pid"
 
 user "chef"
 group "chef"
+
+# rabbitmq password
+amqp_pass File.read('/etc/chef/amqp_passwd').chomp
+amqp_consumer_id "01"
+
+

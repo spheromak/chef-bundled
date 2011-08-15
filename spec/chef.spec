@@ -3,10 +3,13 @@
 %define rubyver 1.9.0
 %define bundler_install_to  /usr/local
 %define arch x86_64
-%define chef_ver 0.9.12
-%define rel_ver  6
+%define chef_ver 0.10.4
+%define rel_ver  1
 %define chef_user chef
 %define chef_group chef
+
+# move src files to its own dir
+%define _sourcedir     %{_topdir}/src/chef
 
 Name: %{bundlename}
 Version: %{chef_ver}
@@ -22,8 +25,7 @@ Source7: client.rb
 Source8: solo.rb
 Source9: chef-client.sysconf
 Source10: chef-create-amqp_passwd
-source50: yum.rb
-Source999: %{name}-Gemfile
+Source999: Gemfile
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
@@ -72,6 +74,11 @@ else
    bundle init
 fi
 
+echo 'gem "mixlib-log", "1.3.0" ' >> Gemfile
+echo 'gem "net-ssh-multi" ' >> Gemfile
+echo 'gem "knife-flow" ' >> Gemfile
+echo 'gem "knife-github-cookbooks" ' >> Gemfile
+echo 'gem "ruby-shadow"' >> Gemfile
 echo "gem \"%{name}\", \"%{version}\" "  >> Gemfile
 
 
@@ -125,10 +132,6 @@ install -Dp -m0644 \
 install -Dp -m0755 \
   %{SOURCE10} %{buildroot}%{_sbindir}/chef-create-amqp_passwd
 
-# patched yum provider remove when upstream accepts
-install -Dp -m0644   \
-  %{SOURCE50} %{buildroot}%{bundler_install_to}/%{name}/%{name}-bundle/ruby/1.9.1/gems/%{name}-%{version}/lib/chef/provider/package/yum.rb
-
 %clean
 rm -rf %{buildroot}
 
@@ -157,8 +160,10 @@ exit 0
 
 %{_sbindir}/chef-create-amqp_passwd
 
-#%doc
-#%{_mandir}
+%config(noreplace) /etc/chef/client.rb
+%config(noreplace) /etc/sysconfig/chef-client
+
+
 
 
 
