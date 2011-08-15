@@ -5,7 +5,7 @@
 
 %define rubyver		1.9.2
 %define rubyxver    1.9
-%define rubyminorver 0
+%define rubyminorver  180
 %define gems_version 1.3.7
 
 %define sitedir     %{_libdir}/ruby/site_ruby
@@ -13,7 +13,7 @@
 
 Name:		ruby
 Version:	%{rubyver}.%{rubyminorver}
-Release:	7%{?dist}
+Release:	8%{?dist}
 License:	Ruby License/GPL - see COPYING
 URL:		http://www.ruby-lang.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -33,8 +33,10 @@ Provides:ri = %{version}-%{release}
 Provides:ruby(rubygems) = %{gems_version}
 Provides:rubygems
 Provides:ruby-libs
+Provides:ruby-rdoc
+Provides:ruby-ri
 
-Obsoletes:rubygems, ruby-rdoc, ruby-irb, ruby-libs, ruby-devel
+Obsoletes:rubygems, ruby-rdoc, ruby-irb, ruby-libs, ruby-devel, ruby-ri
 
 %description
 Ruby is the interpreted scripting language for quick and easy
