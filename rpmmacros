@@ -1,0 +1,41 @@
+#
+# Custom RPM macros configuration file for building RPM packages
+# as a non-root user.
+#
+# used by setup_rpm_environment for building Postfix RPMs
+#
+# Author:  Simon J Mudd
+#
+# Notes: - structure borrowed from OpenPKG.
+#        - do not replace %{name} with other macro values as my scripts may
+#          not work otherwise.
+#
+# %_topdir defines the top directory to be used for RPM building purposes
+%_topdir        %(echo $HOME)/rpm_build
+%_sourcedir     %{_topdir}/src/
+%_specdir       %{_topdir}/spec/
+%_tmppath       %{_topdir}/tmp
+%_builddir      %{_topdir}/build
+%_rpmdir        %{_topdir}/pkg
+%_srcrpmdir     %{_topdir}/pkg
+%_buildroot     %{_topdir}/tmp/%{name}-%{version}-root
+
+#%_rpmfilename   %{name}-%{version}-%{release}.%{arch}.rpm
+
+%packager       %(echo ${USER}@)%(hostname)
+
+# customize the dist names ;)
+#%distribution mine 
+#%dist mine
+
+%bundler_install_to  /usr/local/
+
+
+
+
+# GNU GPG config below
+#%_signature     gpg
+#%_gpg_name      Your name here <someone@somewhere.com>
+#%_gpg_path      %(echo $HOME)/.gnupg
+
+%debug_package %{nil}

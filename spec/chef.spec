@@ -4,7 +4,7 @@
 %define bundler_install_to  /usr/local
 %define arch x86_64
 %define chef_ver 0.10.4
-%define rel_ver  1
+%define rel_ver  2
 %define chef_user chef
 %define chef_group chef
 
@@ -78,6 +78,7 @@ echo 'gem "mixlib-log", "1.3.0" ' >> Gemfile
 echo 'gem "net-ssh-multi" ' >> Gemfile
 echo 'gem "knife-flow" ' >> Gemfile
 echo 'gem "knife-github-cookbooks" ' >> Gemfile
+echo 'gem "minitest" ' >> Gemfile
 echo 'gem "ruby-shadow"' >> Gemfile
 echo "gem \"%{name}\", \"%{version}\" "  >> Gemfile
 

@@ -1,7 +1,7 @@
 My hacked versions of chef rpm's to use bundler 
-
 defaults to /usr/local 
 
+setup.sh will copy our version to your home, and create a symlink from ~/rpm_build to this dir
 
 
 my ~/.rpmmacros lays this out to build from my repos as so:
@@ -30,6 +30,7 @@ Most the specs are hacked up versions of other peoples work by these fine folk:
 Sean OMeara 
 mkent 
 jtimberman
+Simon j Mudd
 
 if theres others i missed im sorry :)
 
