@@ -60,4 +60,6 @@ group "chef"
 amqp_pass File.read('/etc/chef/amqp_passwd').chomp
 amqp_consumer_id "01"
 
-
+# chef_expander configs so this works by default
+index 1 
+node_count 2
