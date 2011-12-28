@@ -2,9 +2,8 @@
 %define rubyabi 1.9
 %define rubyver 1.9.0
 %define bundler_install_to  /usr/local
-%define arch x86_64
-%define chef_ver 0.10.4
-%define rel_ver  2
+%define chef_ver 0.10.8
+%define rel_ver  3
 %define chef_user chef
 %define chef_group chef
 
@@ -31,7 +30,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
 BuildRequires: rpm-devel
 BuildRequires: ruby >= %{rubyver}
-#BuildArch: %{arch}
 
 Requires: ruby >= %{rubyver}
 Requires: ruby(rubygems)
@@ -40,7 +38,6 @@ Requires: rubygem(bundler)
 Provides: %{bundlename} = %{version}
 Provides: chef-client = %{version}
 Obsoletes: chef-common, chef-client, rubygem-chef, ohai, rubygem-ohai
-
 
 Requires(pre): shadow-utils
 Requires(post): chkconfig
@@ -132,6 +129,11 @@ install -Dp -m0644 \
 # aqmp passwd stuffs
 install -Dp -m0755 \
   %{SOURCE10} %{buildroot}%{_sbindir}/chef-create-amqp_passwd
+
+
+# fix up busted  gem paths
+find %{buildroot}%{bundler_install_to} -type f | \
+  xargs -n 1 sed -i -e 's"^#!/usr/local/bin/ruby"#!/usr/bin/ruby"'
 
 %clean
 rm -rf %{buildroot}
