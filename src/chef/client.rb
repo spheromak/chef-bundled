@@ -6,7 +6,7 @@
 log_level          :warn
 log_location       "/var/log/chef/client.log"
 ssl_verify_mode    :verify_none
-chef_server_url    "http://chef.military.com:4000"
+chef_server_url    "http://localhost:4000"
 
 validation_client_name "chef-validator"
 validation_key      	 "/etc/chef/validation.pem"
