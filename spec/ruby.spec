@@ -3,10 +3,10 @@
 #%define _mandir		/usr/local/man
 #%define _infodir	/usr/local/share/info
 
-%define rubyver		1.9.2
+%define rubyver		1.9.3
 %define rubyxver    1.9
-%define rubyminorver  180
-%define gems_version 1.3.7
+%define rubyminorver  0
+%define gems_version 1.8.15
 
 %define sitedir     %{_libdir}/ruby/site_ruby
 
@@ -49,7 +49,15 @@ straight-forward, and extensible.
 %build
 CFLAGS="$RPM_OPT_FLAGS -Wall -fno-strict-aliasing"
 export CFLAGS
-%configure --with-sitedir='%{sitedir}' --enable-shared  --with-ruby-prefix=%{_prefix}/lib --disable-rpath
+
+%configure --enable-shared \
+  --disable-rpath \
+  --without-X11 \
+  --without-tk \
+  --includedir=%{_includedir}/ruby \
+  --libdir=%{_libdir} \
+  --with-sitedir='%{sitedir}' \
+  --with-ruby-prefix=%{_prefix}/lib 
 
 make RUBY_INSTALL_NAME=ruby %{?_smp_mflags}
 
@@ -60,7 +68,7 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 cd  $RPM_BUILD_ROOT/%{_libdir}
 ln -s libruby.so.1.9  libruby.so.1.8
-
+rm -rf  $RPM_BUILD_ROOT/usr/src
 
 %clean
 rm -rf $RPM_BUILD_ROOT
