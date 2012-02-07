@@ -71,12 +71,13 @@ else
    bundle init
 fi
 
-echo 'gem "mixlib-log", "1.3.0" ' >> Gemfile
+echo 'gem "mixlib-log"  ' >> Gemfile
 echo 'gem "net-ssh-multi" ' >> Gemfile
 echo 'gem "knife-flow" ' >> Gemfile
 echo 'gem "knife-github-cookbooks" ' >> Gemfile
 echo 'gem "minitest" ' >> Gemfile
 echo 'gem "ruby-shadow"' >> Gemfile
+echo 'gem "xml-simple"' >> Gemfile
 echo "gem \"%{name}\", \"%{version}\" "  >> Gemfile
 
 
