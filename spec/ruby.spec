@@ -5,15 +5,15 @@
 
 %define rubyver		1.9.3
 %define rubyxver    1.9
-%define rubyminorver  0
-%define gems_version 1.8.15
-
+%define rubyminorver  125 
+%define gems_version 1.8.17
+%define rev 1
 %define sitedir     %{_libdir}/ruby/site_ruby
 
 
 Name:		ruby
 Version:	%{rubyver}.%{rubyminorver}
-Release:	8%{?dist}
+Release:	%{rev}.%{?dist}
 License:	Ruby License/GPL - see COPYING
 URL:		http://www.ruby-lang.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
