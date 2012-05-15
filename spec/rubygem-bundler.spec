@@ -6,8 +6,8 @@
 
 Summary: The best way to manage your application's dependencies
 Name: rubygem-%{gemname}
-Version: 1.0.21
-Release: 1%{?dist}
+Version: 1.1.3
+Release: 2.%{?dist}
 Group: Development/Languages
 License: GPLv2+ or Ruby
 URL: http://gembundler.com
