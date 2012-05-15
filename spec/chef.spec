@@ -2,8 +2,8 @@
 %define rubyabi 1.9
 %define rubyver 1.9.0
 %define bundler_install_to  /usr/local
-%define chef_ver 0.10.8
-%define rel_ver  3
+%define chef_ver 0.10.10
+%define rel_ver  2
 %define chef_user chef
 %define chef_group chef
 
@@ -12,7 +12,7 @@
 
 Name: %{bundlename}
 Version: %{chef_ver}
-Release: %{rel_ver}%{?dist}
+Release: %{rel_ver}.%{?dist}
 Summary: Client and libraries for Chef systems integration framework
 Group: Development/Languages
 License: ASL 2.0
@@ -23,7 +23,6 @@ Source6: chef-client.init
 Source7: client.rb
 Source8: solo.rb
 Source9: chef-client.sysconf
-Source10: chef-create-amqp_passwd
 Source999: Gemfile
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
@@ -76,6 +75,7 @@ echo 'gem "net-ssh-multi" ' >> Gemfile
 echo 'gem "knife-flow" ' >> Gemfile
 echo 'gem "knife-github-cookbooks" ' >> Gemfile
 echo 'gem "minitest" ' >> Gemfile
+echo 'gem "minitest-chef-handler" ' >> Gemfile
 echo 'gem "ruby-shadow"' >> Gemfile
 echo 'gem "xml-simple"' >> Gemfile
 echo "gem \"%{name}\", \"%{version}\" "  >> Gemfile
@@ -83,9 +83,8 @@ echo "gem \"%{name}\", \"%{version}\" "  >> Gemfile
 
 
 %build
-bundle install --binstubs     --path %{name}-bundle 
+bundle install --path %{name}-bundle  --binstubs 
 bundle package 
-bundle install --path %{name}-bundle --deployment   --binstubs --local 
 
 
 
@@ -127,9 +126,6 @@ install -Dp -m0644 \
 install -Dp -m0644 \
   %{SOURCE8} %{buildroot}%{_sysconfdir}/chef/solo.rb
 
-# aqmp passwd stuffs
-install -Dp -m0755 \
-  %{SOURCE10} %{buildroot}%{_sbindir}/chef-create-amqp_passwd
 
 
 # fix up busted  gem paths
@@ -161,8 +157,6 @@ exit 0
 %attr(-,%{chef_user},root) %dir %{_localstatedir}/cache/chef
 %attr(-,%{chef_user},root) %dir %{_localstatedir}/run/chef
 
-
-%{_sbindir}/chef-create-amqp_passwd
 
 %config(noreplace) /etc/chef/client.rb
 %config(noreplace) /etc/sysconfig/chef-client
