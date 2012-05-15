@@ -1,6 +1,6 @@
 Name:           zeromq
 Version:        2.1.11
-Release:        1%{?dist}
+Release:        1.%{?dist}
 Summary:        Software library for fast, message-based applications
 
 Group:          System Environment/Libraries
