@@ -1,0 +1,3 @@
+Build chross arch package with this command
+setarch i386 rpmbuild --target i386 -ba chef-server.spec 
+
