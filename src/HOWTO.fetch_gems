@@ -1,0 +1,4 @@
+
+Pulling the bundler gem into this src dir is easy with gem command
+gem fetch --remote  bundler
+
