@@ -173,7 +173,16 @@ cd %{buildroot}/etc/chef
 ln -s solr.rb  expander.rb 
 
 
-
+#
+# Oh, those wacky developers.
+# should be a better way to do this 
+#
+for i in `find '%{buildroot}%{bundler_install_to}' -type f ` ; do 
+  sed -i -e 's"^#!/usr/bin/env ruby"#!/usr/bin/ruby"'  $i
+  sed -i -e 's"^#!/usr/local/ruby"#!/usr/bin/ruby"' $i 
+  sed -i -e 's"^#!/usr/local/bin/ruby"#!/usr/bin/ruby"' $i 
+  sed -i -e 's"/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby"#!/usr/bin/ruby"' $i
+done 
 
 %clean
 rm -rf %{buildroot}
