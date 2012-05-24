@@ -5,7 +5,7 @@
 Summary: Implementation of a YAML 1.1 parser and emitter
 Name: libyaml
 Version: 0.1.4
-Release: 4.%{?dist}
+Release: 5%{dist}
 License: MIT/X Consortium
 Group: Development/Libraries
 URL: http://pyyaml.org/wiki/LibYAML

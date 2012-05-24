@@ -3,7 +3,7 @@
 %define rubyver 1.9.0
 %define bundler_install_to  /usr/local
 %define chef_ver 0.10.10
-%define rel_ver  2
+%define rel_ver  3
 %define chef_user chef
 %define chef_group chef
 
@@ -12,7 +12,7 @@
 
 Name: %{bundlename}
 Version: %{chef_ver}
-Release: %{rel_ver}.%{?dist}
+Release: %{rel_ver}%{?dist}
 Summary: Client and libraries for Chef systems integration framework
 Group: Development/Languages
 License: ASL 2.0
