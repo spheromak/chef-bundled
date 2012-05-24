@@ -4,7 +4,7 @@
 %define bundler_install_to  /usr/local
 %define arch x86_64
 %define chef_ver 0.10.10
-%define rel 2
+%define rel 3
 %define chef_user chef
 %define chef_group chef
 %define components  "chef-server" "chef-expander" "chef-server-webui" "chef-solr"
@@ -13,7 +13,7 @@
 
 Name: %{bundlename}
 Version: %{chef_ver}
-Release: %{rel}.%{?dist}
+Release: %{rel}%{?dist}
 Summary: Monolithic chef-server  includes api/slice/solr in one go (via bundler)
 Group:  System Environment/Daemons
 License: ASL 2.0
@@ -126,7 +126,6 @@ for i in %{components} ; do
   mv $i  %{buildroot}/%{bundler_install_to}/
 done
 
-# create /usr/local/bin or whatever bindir is incase it doesn't exist
 mkdir -p %{buildroot}%{_bindir}
 
 cd  %{buildroot}
