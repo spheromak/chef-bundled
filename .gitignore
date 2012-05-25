@@ -1,5 +1,6 @@
 pkg/
 tmp/
+build/
 *.gz
 *.tgz
 *.gem
