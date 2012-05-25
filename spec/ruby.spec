@@ -7,7 +7,7 @@
 %define rubyxver    1.9
 %define rubyminorver  194
 %define gems_version 1.8.24
-%define rev 2
+%define rev 3
 %define sitedir     %{_libdir}/ruby/site_ruby
 
 
@@ -28,13 +28,12 @@ Provides:libruby.so.1.8()(64bit)
 Provides:ruby(abi) = %{rubyxver}
 Provides:libruby = %{version}-%{release}
 Provides:irb = %{version}-%{release}
-Provides:rdoc = %{version}-%{release}
 Provides:ri = %{version}-%{release}
 Provides:ruby(rubygems) = %{gems_version}
 Provides:rubygems
 Provides:ruby-libs
 Provides:ruby-rdoc
-Provides:ruby-ri
+Provides:rdoc = %{version}-%{release}
 
 Obsoletes:rubygems, ruby-rdoc, ruby-irb, ruby-libs, ruby-devel, ruby-ri
 
@@ -43,6 +42,13 @@ Ruby is the interpreted scripting language for quick and easy
 object-oriented programming.  It has many features to process text
 files and to do system management tasks (as in Perl).  It is simple,
 straight-forward, and extensible.
+
+%package doc
+Summary: Ruby documentation
+Group:  Development/Libraries  
+Provides:ruby-ri
+%description doc
+Ruby Documentation broken into its own package. Includes ruby-ri 
 
 %prep
 %setup -n ruby-%{rubyver}-p%{rubyminorver}
@@ -73,11 +79,23 @@ rm -rf  $RPM_BUILD_ROOT/usr/src
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files 
+%files doc
 %defattr(-, root, root)
 %doc README COPYING ChangeLog LEGAL ToDo 
-%{_prefix}/*
+%doc %{_prefix}/share/ri
+%doc %{_prefix}/share/doc
+
+%files 
+%defattr(-, root, root)
+%{_prefix}/bin
+%{_prefix}/include  
+%{_prefix}/lib64  
+%{_prefix}/local
 
 %changelog
+* Fri May 25 2012 Jesse Nelson <spheormak@gmail.com> - 1.9.3-p194-3
+- update for 194 
+- break doc and ri out to their own package
+
 * Fri Nov 15 2010 Taylor Kimball <taylor@linuxhq.org> - 1.9.2-p0-1
 - Initial build for el5 based off of el5 spec.
