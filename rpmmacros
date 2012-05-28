@@ -17,7 +17,7 @@
 %_tmppath       %{_topdir}/tmp
 %_builddir      %{_topdir}/build
 %_rpmdir        %{_topdir}/pkg
-%_srcrpmdir     %{_topdir}/pkg
+%_srcrpmdir     %{_topdir}/pkg/src
 %_buildroot     %{_topdir}/tmp/%{name}-%{version}-root
 
 #%_rpmfilename   %{name}-%{version}-%{release}.%{arch}.rpm
