@@ -22,3 +22,10 @@ Generally want to build in this order
 * rubygems-bundler
 * zeromq
 * chef
+
+NOTE:
+-----
+you probably want to setup your ~/.gemrc file like so:
+    gem: --no-rdoc --no-ri 
+
+this way you can keep your bundled chef size down a bit

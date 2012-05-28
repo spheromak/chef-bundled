@@ -3,7 +3,6 @@ defaults to /usr/local
 
 setup.sh will copy our version to your home, and create a symlink from ~/rpm_build to this dir
 
-
 my ~/.rpmmacros lays this out to build from my repos as so:
 
 # %_topdir defines the top directory to be used for RPM building purposes
@@ -19,14 +18,13 @@ my ~/.rpmmacros lays this out to build from my repos as so:
 #%_rpmfilename   %{name}-%{version}-%{release}.%{arch}.rpm
 
 %packager       %(echo ${USER}@)%(hostname)
-%distribution   mnst
-%dist mnst
+%distribution   .foo
+%dist .foo
 
 %bundler_install_to  /usr/local/
 
 
 Most the specs are hacked up versions of other peoples work by these fine folk:
-
 Sean OMeara 
 mkent 
 jtimberman
